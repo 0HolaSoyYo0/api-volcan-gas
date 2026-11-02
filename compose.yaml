@@ -1,0 +1,19 @@
+services:
+  db:
+    image: mysql:9.7.4
+    container_name: volcan_gas_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: Admin
+      MYSQL_DATABASE: volcan_gas_db
+      MYSQL_USER: volcan_user
+      MYSQL_PASSWORD: usuario-clave
+      TZ: "America/Santiago"
+    ports:
+      - "3307:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-u", "root", "-proot_password_seguro"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
