@@ -1,3 +1,11 @@
 spring:
-  application:
-    name: api-volcan-gas
+  datasource:
+    url: jdbc:mysql://localhost:3307/volcan_gas_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Santiago
+    username: volcan_user
+    password: usuario-clave
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: false
