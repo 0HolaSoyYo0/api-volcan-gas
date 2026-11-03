@@ -1,218 +1,84 @@
 # API Volcán Gas
 
-Backend REST del proyecto **Distribuidora de Gas El Volcán**, desarrollado para el caso académico del curso **DSY1104 – Desarrollo FullStack II**.
+Backend REST del proyecto **Distribuidora de Gas El Volcán**, desarrollado en el contexto del curso **DSY1104 – Desarrollo FullStack II**.
 
-La API proporcionará los servicios de acceso a datos y lógica de negocio que necesita la aplicación web para administrar productos, clientes y ventas. El proyecto se encuentra en una etapa inicial de construcción: este documento distingue la configuración que ya existe de las funcionalidades que todavía están planificadas.
+Su propósito es proporcionar una API que centralice el acceso a los datos y las operaciones del negocio, permitiendo que la aplicación web consulte y gestione la información de productos, clientes y ventas.
 
-## Repositorios del proyecto
+## Proyecto
+
+Volcán Gas es una plataforma orientada a apoyar la gestión de una distribuidora de gas licuado a domicilio, facilitando la administración de sus productos y operaciones comerciales.
+
+El proyecto se divide en dos componentes:
 
 | Componente | Repositorio | Descripción |
-| --- | --- | --- |
-| Frontend | [web-volcan-gas](https://github.com/0HolaSoyYo0/web-volcan-gas) | Aplicación web desarrollada con React. |
-| Backend | [api-volcan-gas](https://github.com/0HolaSoyYo0/api-volcan-gas) | API REST desarrollada con Spring Boot. |
+|---|---|---|
+| Frontend | [web-volcan-gas](https://github.com/0HolaSoyYo0/web-volcan-gas) | Interfaz web desarrollada con React. |
+| Backend | [api-volcan-gas](https://github.com/0HolaSoyYo0/api-volcan-gas) | API REST encargada de la lógica de negocio y persistencia de datos. |
 
-El frontend contiene actualmente un catálogo de productos alimentado desde datos locales (`src/data/productos.js`). La conexión con esta API todavía está pendiente; por lo tanto, los datos del prototipo web no se consultan ni se persisten en el backend.
+Ambos componentes se desarrollan de manera independiente y se comunicarán mediante solicitudes HTTP. Actualmente, el frontend utiliza datos locales para representar el catálogo de productos, por lo que la integración con el backend todavía está pendiente.
 
 ## Objetivo
 
-Centralizar el acceso a la información de Volcán Gas mediante una API REST que permita al frontend consultar y administrar los recursos del negocio.
+Desarrollar una API REST que permita administrar los principales recursos del sistema mediante operaciones CRUD (crear, consultar, actualizar y eliminar).
 
-El alcance inicial del backend contempla operaciones CRUD independientes para:
+Su implementación busca separar la interfaz de usuario de la lógica de negocio y el acceso a datos, proporcionando una estructura organizada y preparada para incorporar nuevas funcionalidades.
 
-- **Producto:** información del catálogo de cilindros de gas.
-- **Cliente:** datos de las personas que utilizan el servicio.
-- **Venta:** registro de las ventas realizadas.
+## Alcance actual
 
-En esta primera etapa académica, los recursos se implementarán sin asociaciones JPA entre entidades. Cuando sea necesario referenciar otro registro, se utilizarán identificadores simples.
+La primera etapa del backend se concentra en tres recursos principales:
+
+- **Productos:** administrar la información de los cilindros disponibles en el catálogo.
+- **Clientes:** almacenar y gestionar la información de los clientes.
+- **Ventas:** registrar y administrar las ventas realizadas.
+
+Cada recurso contará con operaciones CRUD independientes. En esta etapa, las entidades no utilizarán asociaciones JPA entre sí; las referencias necesarias se manejarán mediante identificadores simples.
+
+Este alcance permite establecer la base funcional de la API sin incorporar anticipadamente procesos comerciales más complejos.
+
+## Arquitectura
+
+El backend utiliza una arquitectura por capas, separando las responsabilidades de cada componente:
+
+| Capa | Responsabilidad |
+|---|---|
+| **Model** | Representar las entidades del sistema y su estructura persistente. |
+| **Repository** | Gestionar el acceso a la base de datos mediante Spring Data JPA. |
+| **Service** | Centralizar las operaciones y reglas de negocio. |
+| **Controller** | Exponer los recursos mediante endpoints REST. |
+
+El flujo general de una solicitud será:
+
+`Frontend → Controller → Service → Repository → Base de datos`
+
+Esta separación facilita el mantenimiento, la organización del código y la evolución independiente de cada responsabilidad.
 
 ## Tecnologías
 
-| Tecnología | Uso |
-| --- | --- |
-| Java 25 | Lenguaje de programación. |
-| Spring Boot 4.1.2 | Configuración y ejecución de la aplicación. |
-| Maven Wrapper | Construcción y gestión de dependencias. |
-| Spring Web MVC | Desarrollo de endpoints REST. |
-| Spring Data JPA / Hibernate | Persistencia y mapeo objeto-relacional. |
-| MySQL 9.7.4 | Base de datos relacional configurada para desarrollo. |
-| Flyway | Control y ejecución versionada de migraciones SQL. |
-| Spring Validation | Validación de datos de entrada. |
-| Springdoc OpenAPI 3.2.0 | Generación de documentación OpenAPI y Swagger UI. |
-| Docker Compose | Ejecución local del servicio MySQL. |
+- **Java 25:** lenguaje de programación.
+- **Spring Boot 4.1.2:** framework principal del backend.
+- **Spring Web MVC:** construcción de la API REST.
+- **Spring Data JPA:** persistencia y acceso a datos.
+- **Hibernate:** implementación ORM.
+- **MySQL 9.7.4:** sistema de gestión de base de datos.
+- **Flyway:** control de versiones y evolución del esquema de base de datos.
+- **Spring Validation:** validación de datos.
+- **Springdoc OpenAPI:** documentación de la API.
 
-## Arquitectura prevista
+## Estado del desarrollo
 
-La API seguirá una separación por capas para mantener las responsabilidades organizadas:
+El proyecto se encuentra en una etapa inicial de construcción.
 
-| Capa | Responsabilidad |
-| --- | --- |
-| **Controller** | Recibir solicitudes HTTP, delegar operaciones y construir respuestas REST. |
-| **Service** | Contener las operaciones y reglas de la aplicación. |
-| **Repository** | Acceder a la base de datos mediante Spring Data JPA. |
-| **Model** | Representar las entidades persistentes. |
+Actualmente cuenta con la estructura base de Spring Boot, las dependencias principales, la configuración de conexión a MySQL y una migración inicial para las tablas de productos, clientes y ventas.
 
-El flujo esperado de una solicitud es:
+Todavía se encuentra pendiente la implementación completa de las entidades JPA, repositorios, servicios, controladores REST y sus respectivas pruebas. La integración con el frontend también forma parte del trabajo futuro.
 
-`Frontend → Controller → Service → Repository → MySQL`
+## Proyección
 
-La estructura y las clases de estas capas se completarán a medida que se implementen las historias de usuario del backend.
+Una vez completada la base CRUD, el backend podrá evolucionar para dar soporte a funcionalidades adicionales del sistema, como autenticación, gestión de pedidos, carrito de compras, pagos, inventario y seguimiento de entregas.
 
-## Endpoints previstos
-
-Los siguientes endpoints representan el contrato REST inicial que se busca implementar. **Todavía no están disponibles**, porque los controladores y servicios CRUD se encuentran pendientes de desarrollo.
-
-| Método | Ruta | Operación |
-| --- | --- | --- |
-| GET | `/api/productos` | Listar productos. |
-| GET | `/api/productos/{id}` | Obtener un producto por ID. |
-| POST | `/api/productos` | Crear un producto. |
-| PUT | `/api/productos/{id}` | Actualizar un producto existente. |
-| DELETE | `/api/productos/{id}` | Eliminar un producto. |
-| GET | `/api/clientes` | Listar clientes. |
-| GET | `/api/clientes/{id}` | Obtener un cliente por ID. |
-| POST | `/api/clientes` | Crear un cliente. |
-| PUT | `/api/clientes/{id}` | Actualizar un cliente existente. |
-| DELETE | `/api/clientes/{id}` | Eliminar un cliente. |
-| GET | `/api/ventas` | Listar ventas. |
-| GET | `/api/ventas/{id}` | Obtener una venta por ID. |
-| POST | `/api/ventas` | Crear una venta. |
-| PUT | `/api/ventas/{id}` | Actualizar una venta existente. |
-| DELETE | `/api/ventas/{id}` | Eliminar una venta. |
-
-## Requisitos para ejecutar el proyecto
-
-Antes de iniciar, asegúrate de tener instalado:
-
-- **JDK 25**.
-- **Docker** con Docker Compose.
-- Git.
-
-No es necesario instalar Maven globalmente, ya que el repositorio incluye Maven Wrapper.
-
-## Configuración local
-
-### 1. Clonar el repositorio
-
-```bash
-git clone https://github.com/0HolaSoyYo0/api-volcan-gas.git
-cd api-volcan-gas
-```
-
-### 2. Iniciar MySQL
-
-El archivo `compose.yaml` define un servicio MySQL para desarrollo local, publicado en el puerto `3307` del equipo.
-
-```bash
-docker compose up -d db
-```
-
-Puedes revisar el estado y los registros del contenedor con:
-
-```bash
-docker compose ps
-docker compose logs -f db
-```
-
-**Nota sobre el healthcheck:** actualmente, la contraseña utilizada por el healthcheck de Compose no coincide con la variable `MYSQL_ROOT_PASSWORD` del servicio. Por eso, el contenedor podría aparecer como `unhealthy` aunque el servidor MySQL haya iniciado. Hay que corregir esa diferencia en `compose.yaml` antes de utilizar el estado del healthcheck como verificación definitiva.
-
-### 3. Revisar la conexión de la aplicación
-
-La configuración actual se encuentra en `src/main/resources/application.yaml` y apunta a:
-
-- Host: `localhost`.
-- Puerto: `3307`.
-- Base de datos: `volcan_gas_db`.
-- Usuario de desarrollo: el configurado en `application.yaml` y `compose.yaml`.
-
-La aplicación permite sobrescribir las propiedades de conexión mediante variables de entorno de Spring. Antes de ejecutar el proyecto, configura tus propias credenciales locales, por ejemplo:
-
-**Linux / macOS:**
-
-```bash
-export SPRING_DATASOURCE_URL="jdbc:mysql://localhost:3307/volcan_gas_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Santiago"
-export SPRING_DATASOURCE_USERNAME="tu_usuario"
-export SPRING_DATASOURCE_PASSWORD="tu_clave"
-```
-
-**Windows PowerShell:**
-
-```powershell
-$env:SPRING_DATASOURCE_URL="jdbc:mysql://localhost:3307/volcan_gas_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Santiago"
-$env:SPRING_DATASOURCE_USERNAME="tu_usuario"
-$env:SPRING_DATASOURCE_PASSWORD="tu_clave"
-```
-
-No guardes contraseñas personales o de producción en el repositorio. Los valores incluidos actualmente en los archivos de configuración deben considerarse exclusivamente de desarrollo y reemplazarse por credenciales locales.
-
-### 4. Ejecutar las migraciones
-
-Flyway está configurado para buscar migraciones en:
-
-`src/main/resources/db/migration`
-
-La migración inicial `V1__crea_schema_inicial.sql` crea el esquema `volcan_gas_db` y las tablas preliminares `productos`, `clientes` y `ventas`. Flyway ejecuta las migraciones pendientes al iniciar la aplicación.
-
-**Importante sobre `init.sql`:** el archivo ubicado en la raíz del repositorio contiene un esquema alternativo y comienza con `DROP SCHEMA IF EXISTS volcan_gas_db`. Además, su estructura no coincide con la migración Flyway: por ejemplo, utiliza `usuarios` en lugar de `clientes` y separa los detalles y pagos de las ventas. No ejecutes `init.sql` junto con Flyway ni sobre una base que contenga datos que quieras conservar. La estrategia de esquema debe mantenerse centralizada en las migraciones versionadas.
-
-### 5. Ejecutar la aplicación
-
-En Linux / macOS:
-
-```bash
-./mvnw spring-boot:run
-```
-
-En Windows:
-
-```powershell
-.\mvnw.cmd spring-boot:run
-```
-
-Si el inicio finaliza correctamente, Spring Boot estará escuchando en:
-
-`http://localhost:8080`
-
-### 6. Ejecutar las pruebas
-
-```bash
-./mvnw test
-```
-
-En Windows:
-
-```powershell
-.\mvnw.cmd test
-```
-
-Actualmente existe una prueba inicial de carga del contexto de Spring Boot. Las pruebas específicas de los endpoints y de las operaciones CRUD todavía deben incorporarse.
-
-## Documentación de la API
-
-La dependencia de Springdoc OpenAPI ya está incluida en Maven. Cuando la aplicación esté ejecutándose, la interfaz de Swagger UI estará disponible en:
-
-- [Swagger UI](http://localhost:8080/swagger-ui/index.html)
-- [OpenAPI JSON](http://localhost:8080/v3/api-docs)
-
-La documentación se irá completando a medida que se incorporen los controladores y sus endpoints.
-
-## Estado actual
-
-La rama principal contiene la configuración inicial del proyecto:
-
-- Proyecto Maven con Spring Boot 4.1.2 y Java 25.
-- Clase principal de Spring Boot.
-- Dependencias para persistencia JPA, conexión MySQL, validación, Flyway y documentación OpenAPI.
-- Configuración inicial de conexión a MySQL.
-- Servicio MySQL definido mediante Docker Compose.
-- Primera migración Flyway con tablas preliminares para productos, clientes y ventas.
-- Prueba básica de carga del contexto.
-
-**Pendiente de implementación:** entidades JPA completas, repositorios, servicios CRUD, controladores REST, manejo uniforme de errores y pruebas de los endpoints. Tampoco está implementada todavía la integración entre el frontend y el backend.
-
-## Alcance académico inicial
-
-El primer avance se concentra en establecer la conexión entre Spring Boot y MySQL y construir los CRUD de Producto, Cliente y Venta. Funcionalidades como autenticación, autorización, carrito persistente, pagos en línea, despacho, seguimiento de pedidos y otras reglas comerciales pertenecen a etapas posteriores y no forman parte de este alcance inicial.
+Estas funcionalidades corresponden a etapas posteriores y no forman parte del alcance inicial.
 
 ---
 
-Proyecto académico **DSY1104 – Desarrollo FullStack II** · Distribuidora de Gas El Volcán.
+**Proyecto académico · DSY1104 – Desarrollo FullStack II**  
+**Distribuidora de Gas El Volcán**
