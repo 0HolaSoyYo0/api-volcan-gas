@@ -1,9 +1,3 @@
-CREATE DATABASE IF NOT EXISTS volcan_gas_db
-    CHARACTER SET utf8mb4
-    COLLATE utf8mb4_0900_ai_ci;
-
-USE volcan_gas_db;
-
 -- =============================================
 -- PRODUCTO
 -- =============================================
