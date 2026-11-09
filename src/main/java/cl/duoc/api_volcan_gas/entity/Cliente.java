@@ -1,4 +1,4 @@
-package cl.duoc.api_volcan_gas.model;
+package cl.duoc.api_volcan_gas.entity;
 
 
 import jakarta.persistence.*;
