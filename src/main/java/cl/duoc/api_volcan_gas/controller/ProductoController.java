@@ -4,8 +4,11 @@ package cl.duoc.api_volcan_gas.controller;
 import cl.duoc.api_volcan_gas.dto.request.ProductoRequest;
 import cl.duoc.api_volcan_gas.dto.response.ProductoResponse;
 import cl.duoc.api_volcan_gas.service.ProductoService;
+
 import jakarta.validation.Valid;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,6 +48,5 @@ public class ProductoController {
         productoService.eliminar(id);
         return ResponseEntity.noContent().build();
     }
-
 
 }
