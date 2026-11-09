@@ -1,4 +1,4 @@
-package cl.duoc.api_volcan_gas.model;
+package cl.duoc.api_volcan_gas.entity;
 
 
 import jakarta.persistence.*;
@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 
