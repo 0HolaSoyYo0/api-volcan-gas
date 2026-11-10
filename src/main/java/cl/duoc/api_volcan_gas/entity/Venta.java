@@ -21,10 +21,10 @@ public class Venta {
     private Long id;
 
     @Column(name = "cliente_id")
-    private Long idProducto;
+    private Long idCliente;
 
     @Column(name = "producto_id")
-    private Long idCliente;
+    private Long idProducto;
 
     private Integer cantidad;
 
