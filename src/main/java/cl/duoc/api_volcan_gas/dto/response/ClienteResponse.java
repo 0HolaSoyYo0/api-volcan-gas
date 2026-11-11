@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ClienteResponse {
 
-    private Long id;
     private String rut;
     private String nombre;
     private String apellido;
@@ -21,6 +20,5 @@ public class ClienteResponse {
     private String telefono;
     private String direccion;
     private LocalDateTime creadoEn;
-    private Long comunaId;
-    private Long rolId;
+
 }
