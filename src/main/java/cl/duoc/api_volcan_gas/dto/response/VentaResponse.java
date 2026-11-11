@@ -14,9 +14,21 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class VentaResponse {
 
+    /*
+     * El ID de la venta lo genera la DB y actualmente el Front no lo necesita.
+     */
+    /*
     private Long id;
+    */
+
+    /*
+     * Estos campos están en desuso y no se incluyen en la respuesta al Front.
+     */
+    /*
     private Long idCliente;
     private Long idProducto;
+    */
+
     private Integer cantidad;
     private BigDecimal precio;
     private BigDecimal subtotal;
