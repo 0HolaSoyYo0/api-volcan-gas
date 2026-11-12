@@ -24,6 +24,7 @@ public class ClienteController {
 
     private final ClienteService clienteService;
 
+
     @GetMapping("/obtener")
     public ResponseEntity<List<ClienteResponse>> obtenerClientes() {
         return ResponseEntity.ok(clienteService.obtenerTodos());
@@ -46,7 +47,7 @@ public class ClienteController {
 
     @DeleteMapping("/borrar/{id}")
     public ResponseEntity<Void> borrarCliente(@PathVariable Long id) {
-        clienteService.eliminar(id);
+        clienteService.eliminarCliente(id);
         return ResponseEntity.noContent().build();
     }
 
