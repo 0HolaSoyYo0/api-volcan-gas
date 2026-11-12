@@ -23,14 +23,15 @@ public class MapperProducto {
         return producto;
     }
 
-    public ProductoResponse toResponse (Producto producto) {
+    public ProductoResponse toResponse(Producto producto) {
         ProductoResponse response = new ProductoResponse();
 
-        producto.setNombre(producto.getNombre());
-        producto.setPrecio(producto.getPrecio());
-        producto.setCapacidad(producto.getCapacidad());
-        producto.setDescripcion(producto.getDescripcion());
-        producto.setImagen(producto.getImagen());
+        response.setId(producto.getId());
+        response.setNombre(producto.getNombre());
+        response.setPrecio(producto.getPrecio());
+        response.setCapacidad(producto.getCapacidad());
+        response.setDescripcion(producto.getDescripcion());
+        response.setImagen(producto.getImagen());
 
         return response;
     }

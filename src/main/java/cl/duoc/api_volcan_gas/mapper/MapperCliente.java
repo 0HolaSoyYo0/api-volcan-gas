@@ -37,7 +37,7 @@ public class MapperCliente {
         return cliente;
     }
 
-    public ClienteResponse response(Cliente cliente) {
+    public ClienteResponse toResponse(Cliente cliente) {
         ClienteResponse response = new ClienteResponse();
 
         response.setRut(cliente.getRut());
