@@ -30,7 +30,11 @@
 		<java.version>25</java.version>
 	</properties>
 	<dependencies>
-
+		<dependency>
+			<groupId>net.datafaker</groupId>
+			<artifactId>datafaker</artifactId>
+			<version>2.4.2</version>
+		</dependency>
 		<!-- Core de Flyway -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>

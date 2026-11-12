@@ -26,7 +26,7 @@ public class MapperProducto {
     public ProductoResponse toResponse(Producto producto) {
         ProductoResponse response = new ProductoResponse();
 
-        response.setId(producto.getId());
+
         response.setNombre(producto.getNombre());
         response.setPrecio(producto.getPrecio());
         response.setCapacidad(producto.getCapacidad());
