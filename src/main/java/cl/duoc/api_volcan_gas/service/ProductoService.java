@@ -11,10 +11,10 @@ import cl.duoc.api_volcan_gas.repository.ProductoRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
-@RequiredArgsConstructor
 public class ProductoService {
 
     private final ProductoRepository productoRepository;
@@ -74,27 +74,5 @@ public class ProductoService {
         if (!productoRepository.existsById(id))
             throw new ProductoNoEncontradoException(id);
         productoRepository.deleteById(id);
-    }
-
-    // --- Métodos auxiliares de mapeo ---
-    private ProductoResponse mapToResponse(Producto producto) {
-        return new ProductoResponse(
-                producto.getId(),
-                producto.getNombre(),
-                producto.getPrecio(),
-                producto.getCapacidad(),
-                producto.getDescripcion(),
-                producto.getImagen()
-        );
-    }
-
-    private Producto mapToEntity(ProductoRequest request) {
-        Producto producto = new Producto();
-        producto.setNombre(request.getNombre());
-        producto.setPrecio(request.getPrecio());
-        producto.setCapacidad(request.getCapacidad());
-        producto.setDescripcion(request.getDescripcion());
-        producto.setImagen(request.getImagen());
-        return producto;
     }
 }

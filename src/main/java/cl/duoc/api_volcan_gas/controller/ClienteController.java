@@ -32,6 +32,7 @@ public class ClienteController {
 
     private final ClienteService clienteService;
 
+
     @Operation(summary = "Obtener todos los clientes")
     @GetMapping("/obtener")
     public ResponseEntity<List<ClienteResponse>> obtenerClientes() {
