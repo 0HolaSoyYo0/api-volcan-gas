@@ -3,10 +3,9 @@ package cl.duoc.api_volcan_gas.mapper;
 import cl.duoc.api_volcan_gas.dto.request.VentaRequest;
 import cl.duoc.api_volcan_gas.dto.response.VentaResponse;
 import cl.duoc.api_volcan_gas.entity.Venta;
+import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-
+@Component
 public class MapperVenta {
 
     public Venta toEntity(VentaRequest request) {
@@ -15,10 +14,10 @@ public class MapperVenta {
         venta.setCantidad(request.getCantidad());
         venta.setPrecio(request.getPrecio());
         venta.setSubtotal(request.getSubtotal());
-        venta.setSubtotal(request.getTotal());
+        venta.setTotal(request.getTotal());
         venta.setFecha(request.getFecha());
         venta.setTipoPago(request.getTipoPago());
-        venta.setFechaPago(LocalDateTime.now());
+        venta.setFechaPago(request.getFechaPago());
 
         return venta;
     }

@@ -8,16 +8,10 @@ import org.springframework.stereotype.Service;
 import cl.duoc.api_volcan_gas.dto.request.ClienteRequest;
 import cl.duoc.api_volcan_gas.dto.response.ClienteResponse;
 import cl.duoc.api_volcan_gas.entity.Cliente;
-import cl.duoc.api_volcan_gas.dto.response.ClienteResponse;
-import cl.duoc.api_volcan_gas.mapper.MapperCliente;
+import cl.duoc.api_volcan_gas.exception.ClienteNoEncontradoException;
 import cl.duoc.api_volcan_gas.mapper.MapperCliente;
 import cl.duoc.api_volcan_gas.repository.ClienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClienteService {
@@ -36,25 +30,27 @@ public class ClienteService {
                 .stream()
                 .map(mapperCliente::toResponse)
                 .toList();
+    }
+
     // 2. Obtener por ID
     public ClienteResponse obtenerPorId(Long id) {
-        Cliente cliente = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + id));
-        return mapToResponse(cliente);
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ClienteNoEncontradoException(id));
+        return mapperCliente.toResponse(cliente);
     }
 
     // 3. Crear (Request -> Entity -> Guardar -> Response)
     public ClienteResponse crearCliente(ClienteRequest request) {
-        Cliente cliente = mapToEntity(request);
+        Cliente cliente = mapperCliente.toEntity(request);
         cliente.setCreadoEn(LocalDateTime.now());
-        Cliente guardado = repository.save(cliente);
-        return mapToResponse(guardado);
+        Cliente guardado = clienteRepository.save(cliente);
+        return mapperCliente.toResponse(guardado);
     }
 
     // 4. Actualizar
     public ClienteResponse actualizarCliente(Long id, ClienteRequest request) {
-        Cliente cliente = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + id));
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new ClienteNoEncontradoException(id));
 
         cliente.setRut(request.getRut());
         cliente.setNombre(request.getNombre());
@@ -68,15 +64,15 @@ public class ClienteService {
             cliente.setContrasena(request.getContrasena());
         }
 
-        return mapToResponse(repository.save(cliente));
+        return mapperCliente.toResponse(clienteRepository.save(cliente));
     }
 
     // 5. Eliminar
-    public void eliminar(Long id) {
-        if (!repository.existsById(id)) {
-            throw new RuntimeException("Cliente no encontrado con id: " + id);
+    public void eliminarCliente(Long id) {
+        if (!clienteRepository.existsById(id)) {
+            throw new ClienteNoEncontradoException(id);
         }
-        repository.deleteById(id);
+        clienteRepository.deleteById(id);
     }
 /*
     public List<Cliente> getClientesActivos() {
