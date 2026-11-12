@@ -1,14 +1,16 @@
 package cl.duoc.api_volcan_gas.service;
 
+import cl.duoc.api_volcan_gas.dto.request.VentaRequest;
+import cl.duoc.api_volcan_gas.dto.response.VentaResponse;
 import cl.duoc.api_volcan_gas.entity.Venta;
 import cl.duoc.api_volcan_gas.mapper.MapperCliente;
 import cl.duoc.api_volcan_gas.repository.ProductoRepository;
 import cl.duoc.api_volcan_gas.repository.VentaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class VentaService {
@@ -21,28 +23,57 @@ public class VentaService {
         this.mapperCliente = mapperCliente;
     }
 
-    public List<Venta> getVentas() {
-        return ventaRepository.findAll();
+    // 1. Obtener todos
+    public List<VentaResponse> obtenerTodos() {
+        return repository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .toList();
     }
 
-    public Optional<Venta> getVenta(Long id) {
-        return ventaRepository.findById(id);
+    // 2. Obtener por ID
+    public VentaResponse obtenerPorId(Long id) {
+        Venta venta = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Venta no encontrada con id: " + id));
+        return mapToResponse(venta);
     }
 
-    public Venta saveVenta(Venta venta) {
-        return ventaRepository.save(venta);
+    // 3. Crear
+    public VentaResponse crearVenta(VentaRequest request) {
+        Venta venta = mapToEntity(request);
+        if (venta.getFecha() == null) {
+            venta.setFecha(LocalDateTime.now());
+        }
+        Venta guardada = repository.save(venta);
+        return mapToResponse(guardada);
     }
 
-    public Venta updateVenta(Long id, Venta venta) {
-        if (!ventaRepository.existsById(id))
+    // 4. Actualizar
+    public VentaResponse actualizarVenta(Long id, VentaRequest request) {
+        Venta venta = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Venta no encontrada con id: " + id));
+
+        venta.setIdCliente(request.getIdCliente());
+        venta.setIdProducto(request.getIdProducto());
+        venta.setCantidad(request.getCantidad());
+        venta.setPrecio(request.getPrecio());
+        venta.setSubtotal(request.getSubtotal());
+        venta.setTotal(request.getTotal());
+        if (request.getFecha() != null) {
+            venta.setFecha(request.getFecha());
+        }
+        venta.setTipoPago(request.getTipoPago());
+        venta.setFechaPago(request.getFechaPago());
+
+        return mapToResponse(repository.save(venta));
+    }
+
+    // 5. Eliminar
+    public void eliminar(Long id) {
+        if (!repository.existsById(id)) {
             throw new RuntimeException("Venta no encontrada con id: " + id);
-        venta.setId(id);
-        return ventaRepository.save(venta);
+        }
+        repository.deleteById(id);
     }
 
-    public void deleteVenta(Long id) {
-        if (!ventaRepository.existsById(id))
-            throw new RuntimeException("Venta no encontrada con id: " + id);
-        ventaRepository.deleteById(id);
-    }
 }

@@ -9,9 +9,17 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
+import cl.duoc.api_volcan_gas.dto.request.ClienteRequest;
+import cl.duoc.api_volcan_gas.dto.response.ClienteResponse;
+import cl.duoc.api_volcan_gas.entity.Cliente;
+import cl.duoc.api_volcan_gas.repository.ClienteRepository;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class ClienteService {
 
     private final ClienteRepository clienteRepository;
@@ -22,7 +30,7 @@ public class ClienteService {
         this.mapperCliente = mapperCliente;
     }
 
-
+    // 1. Obtener todos (mapear cada Entity a Response)
     public List<ClienteResponse> obtenerTodos() {
         return clienteRepository.findAll()
                 .stream()
@@ -30,30 +38,48 @@ public class ClienteService {
                 .toList();
     }
 
-    public Optional<Cliente> obtenerPorId(Long id) {
-        return clienteRepository.findById(id);
+    // 2. Obtener por ID
+    public ClienteResponse obtenerPorId(Long id) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + id));
+        return mapperCliente(cliente);
     }
 
-    public Cliente crearCliente(Cliente cliente) {
-        return clienteRepository.save(cliente);
+    // 3. Crear (Request -> Entity -> Guardar -> Response)
+    public ClienteResponse crearCliente(ClienteRequest request) {
+        Cliente cliente = mapperCliente(request);
+        cliente.setCreadoEn(LocalDateTime.now());
+        Cliente guardado = clienteRepository.save(cliente);
+        return mapperCliente(guardado);
     }
 
-    public Cliente actualizarCliente(Long id, Cliente cliente) {
-        if (!clienteRepository.existsById(id))
+    // 4. Actualizar
+    public ClienteResponse actualizarCliente(Long id, ClienteRequest request) {
+        Cliente cliente = clienteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + id));
+
+        cliente.setRut(request.getRut());
+        cliente.setNombre(request.getNombre());
+        cliente.setApellido(request.getApellido());
+        cliente.setEmail(request.getEmail());
+        cliente.setTelefono(request.getTelefono());
+        cliente.setDireccion(request.getDireccion());
+        cliente.setComunaId(request.getComunaId());
+        cliente.setRolId(request.getRolId());
+        if (clienteRepository.getContrasena() != null && !request.getContrasena().isBlank()) {
+            cliente.setContrasena(clienteRepository.getContrasena());
+        }
+
+        return mapperCliente(clienteRepository.save(cliente));
+    }
+
+    // 5. Eliminar
+    public void eliminar(Long id) {
+        if (!clienteRepository.existsById(id)) {
             throw new RuntimeException("Cliente no encontrado con id: " + id);
-        cliente.setId(id);
-        return clienteRepository.save(cliente);
-    }
-
-    public void eliminarCliente(Long id) {
-        if (!clienteRepository.existsById(id))
-            throw new RuntimeException("Cliente no encontrado con id: " + id);
+        }
         clienteRepository.deleteById(id);
     }
 
-    /*
-     public List<Cliente> getClientesActivos() {
-        return repository.findClientesActivos();
-     }
-    */
+  
 }
