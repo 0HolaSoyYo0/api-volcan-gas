@@ -1,6 +1,8 @@
 package cl.duoc.api_volcan_gas.service;
 
 import cl.duoc.api_volcan_gas.entity.Cliente;
+import cl.duoc.api_volcan_gas.dto.response.ClienteResponse;
+import cl.duoc.api_volcan_gas.mapper.MapperCliente;
 import cl.duoc.api_volcan_gas.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,36 +13,47 @@ import java.util.Optional;
 
 @Service
 public class ClienteService {
-    @Autowired
-    private ClienteRepository repository;
 
-    public List<Cliente> getClientes() {
-        return repository.findAll();
+    private final ClienteRepository clienteRepository;
+    private final MapperCliente mapperCliente;
+
+    public ClienteService(ClienteRepository clienteRepository, MapperCliente mapperCliente) {
+        this.clienteRepository = clienteRepository;
+        this.mapperCliente = mapperCliente;
     }
 
-    public Optional<Cliente> getCliente(Long id) {
-        return repository.findById(id);
+
+    public List<ClienteResponse> obtenerTodos() {
+        return clienteRepository.findAll()
+                .stream()
+                .map(mapperCliente::toResponse)
+                .toList();
     }
 
-    public Cliente saveCliente(Cliente cliente) {
-        return repository.save(cliente);
+    public Optional<Cliente> obtenerPorId(Long id) {
+        return clienteRepository.findById(id);
     }
 
-    public Cliente updateCliente(Long id, Cliente cliente) {
-        if (!repository.existsById(id))
+    public Cliente crearCliente(Cliente cliente) {
+        return clienteRepository.save(cliente);
+    }
+
+    public Cliente actualizarCliente(Long id, Cliente cliente) {
+        if (!clienteRepository.existsById(id))
             throw new RuntimeException("Cliente no encontrado con id: " + id);
         cliente.setId(id);
-        return repository.save(cliente);
+        return clienteRepository.save(cliente);
     }
 
-    public void deleteCliente(Long id) {
-        if (!repository.existsById(id))
+    public void eliminarCliente(Long id) {
+        if (!clienteRepository.existsById(id))
             throw new RuntimeException("Cliente no encontrado con id: " + id);
-        repository.deleteById(id);
+        clienteRepository.deleteById(id);
     }
-/*
-    public List<Cliente> getClientesActivos() {
+
+    /*
+     public List<Cliente> getClientesActivos() {
         return repository.findClientesActivos();
-    }
+     }
     */
 }
