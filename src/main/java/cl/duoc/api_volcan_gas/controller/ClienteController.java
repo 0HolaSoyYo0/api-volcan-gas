@@ -32,6 +32,7 @@ public class ClienteController {
 
     private final ClienteService clienteService;
 
+
     @Operation(summary = "Obtener todos los clientes")
     @GetMapping("/obtener")
     public ResponseEntity<List<ClienteResponse>> obtenerClientes() {
@@ -59,7 +60,7 @@ public class ClienteController {
     @Operation(summary = "Eliminar un cliente")
     @DeleteMapping("/borrar/{id}")
     public ResponseEntity<Void> borrarCliente(@PathVariable Long id) {
-        clienteService.eliminar(id);
+        clienteService.eliminarCliente(id);
         return ResponseEntity.noContent().build();
     }
 
