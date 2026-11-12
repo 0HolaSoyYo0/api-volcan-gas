@@ -59,7 +59,7 @@ public class ClienteController {
     @Operation(summary = "Eliminar un cliente")
     @DeleteMapping("/borrar/{id}")
     public ResponseEntity<Void> borrarCliente(@PathVariable Long id) {
-        clienteService.eliminar(id);
+        clienteService.eliminarCliente(id);
         return ResponseEntity.noContent().build();
     }
 

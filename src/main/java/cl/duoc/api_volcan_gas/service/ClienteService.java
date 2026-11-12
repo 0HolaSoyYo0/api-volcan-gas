@@ -1,5 +1,12 @@
 package cl.duoc.api_volcan_gas.service;
 
+import cl.duoc.api_volcan_gas.entity.Cliente;
+import cl.duoc.api_volcan_gas.dto.response.ClienteResponse;
+import cl.duoc.api_volcan_gas.mapper.MapperCliente;
+import cl.duoc.api_volcan_gas.repository.ClienteRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -15,34 +22,40 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClienteService {
 
-    private final ClienteRepository repository;
+    private final ClienteRepository clienteRepository;
+    private final MapperCliente mapperCliente;
+
+    public ClienteService(ClienteRepository clienteRepository, MapperCliente mapperCliente) {
+        this.clienteRepository = clienteRepository;
+        this.mapperCliente = mapperCliente;
+    }
 
     // 1. Obtener todos (mapear cada Entity a Response)
     public List<ClienteResponse> obtenerTodos() {
-        return repository.findAll()
+        return clienteRepository.findAll()
                 .stream()
-                .map(this::mapToResponse)
+                .map(mapperCliente::toResponse)
                 .toList();
     }
 
     // 2. Obtener por ID
     public ClienteResponse obtenerPorId(Long id) {
-        Cliente cliente = repository.findById(id)
+        Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + id));
-        return mapToResponse(cliente);
+        return mapperCliente(cliente);
     }
 
     // 3. Crear (Request -> Entity -> Guardar -> Response)
     public ClienteResponse crearCliente(ClienteRequest request) {
-        Cliente cliente = mapToEntity(request);
+        Cliente cliente = mapperCliente(request);
         cliente.setCreadoEn(LocalDateTime.now());
-        Cliente guardado = repository.save(cliente);
-        return mapToResponse(guardado);
+        Cliente guardado = clienteRepository.save(cliente);
+        return mapperCliente(guardado);
     }
 
     // 4. Actualizar
     public ClienteResponse actualizarCliente(Long id, ClienteRequest request) {
-        Cliente cliente = repository.findById(id)
+        Cliente cliente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + id));
 
         cliente.setRut(request.getRut());
@@ -53,48 +66,20 @@ public class ClienteService {
         cliente.setDireccion(request.getDireccion());
         cliente.setComunaId(request.getComunaId());
         cliente.setRolId(request.getRolId());
-        if (request.getContrasena() != null && !request.getContrasena().isBlank()) {
-            cliente.setContrasena(request.getContrasena());
+        if (clienteRepository.getContrasena() != null && !request.getContrasena().isBlank()) {
+            cliente.setContrasena(clienteRepository.getContrasena());
         }
 
-        return mapToResponse(repository.save(cliente));
+        return mapperCliente(clienteRepository.save(cliente));
     }
 
     // 5. Eliminar
     public void eliminar(Long id) {
-        if (!repository.existsById(id)) {
+        if (!clienteRepository.existsById(id)) {
             throw new RuntimeException("Cliente no encontrado con id: " + id);
         }
-        repository.deleteById(id);
+        clienteRepository.deleteById(id);
     }
 
-    // --- Métodos auxiliares de mapeo ---
-    private ClienteResponse mapToResponse(Cliente cliente) {
-        return new ClienteResponse(
-                cliente.getId(),
-                cliente.getRut(),
-                cliente.getNombre(),
-                cliente.getApellido(),
-                cliente.getEmail(),
-                cliente.getTelefono(),
-                cliente.getDireccion(),
-                cliente.getCreadoEn(),
-                cliente.getComunaId(),
-                cliente.getRolId()
-        );
-    }
-
-    private Cliente mapToEntity(ClienteRequest request) {
-        Cliente cliente = new Cliente();
-        cliente.setRut(request.getRut());
-        cliente.setNombre(request.getNombre());
-        cliente.setApellido(request.getApellido());
-        cliente.setEmail(request.getEmail());
-        cliente.setTelefono(request.getTelefono());
-        cliente.setContrasena(request.getContrasena());
-        cliente.setDireccion(request.getDireccion());
-        cliente.setComunaId(request.getComunaId());
-        cliente.setRolId(request.getRolId());
-        return cliente;
-    }
+  
 }
