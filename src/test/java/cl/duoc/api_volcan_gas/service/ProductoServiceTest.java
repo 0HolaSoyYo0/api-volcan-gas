@@ -59,7 +59,7 @@ class ProductoServiceTest {
 
 
         assertEquals(1, resultado.size());
-        assertSame(response, resultado.get(0));
+        assertSame(response, resultado.getFirst());
 
         verify(productoRepository).findAll();
         verify(mapperProducto).toResponse(producto);
