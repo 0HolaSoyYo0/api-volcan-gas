@@ -45,8 +45,8 @@ public class ProductoService {
     }
 
     public ProductoResponse crearProducto(ProductoRequest producto) {
-        Producto productoGuardado = mapperProducto.toEntity(producto);
-        productoRepository.save(productoGuardado);
+        Producto productoNuevo = mapperProducto.toEntity(producto);
+        Producto productoGuardado = productoRepository.save(productoNuevo);
         return mapperProducto.toResponse(productoGuardado);
     }
 
@@ -66,8 +66,8 @@ public class ProductoService {
         productoExistente.setDescripcion(producto.getDescripcion());
         productoExistente.setImagen(producto.getImagen());
 
-        productoRepository.save(productoExistente);
-        return mapperProducto.toResponse(productoExistente);
+        Producto productoActualizado = productoRepository.save(productoExistente);
+        return mapperProducto.toResponse(productoActualizado);
     }
 
     public void eliminarProducto(Long id) {
