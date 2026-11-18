@@ -30,6 +30,7 @@
 		<java.version>25</java.version>
 	</properties>
 	<dependencies>
+		<!-- Modulo para datafaker-->
 		<dependency>
 			<groupId>net.datafaker</groupId>
 			<artifactId>datafaker</artifactId>
